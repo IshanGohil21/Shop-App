@@ -1,9 +1,11 @@
 import React from "react";
-import { View, Text, Image, StyleSheet, Button } from 'react-native';
+import { View, Text, Image, StyleSheet, Button, TouchableOpacity } from 'react-native';
 import Colors from "../../constants/Colors";
 
 const ProductItem = props => {
-    return ( 
+    return (
+        <View style={styles.touchable}>
+    <TouchableOpacity onPress={props.onViewDetail} >
     <View style={styles.product}>
         <View style={styles.imageContainer}>
             <Image style={styles.image} source={{ uri: props.image }}  />
@@ -17,11 +19,13 @@ const ProductItem = props => {
             <Button color={Colors.primary} title = "To Cart" onPress={props.onAddToCart} />
         </View>
     </View>
+    </TouchableOpacity>
+    </View>
     );
 };
 
 const styles = StyleSheet.create({
-    product: {
+    product:{
         shadowColor: 'black',
         shadowOpacity: 0.26,
         textShadowOffset: { width: 0, height: 2 },
@@ -29,14 +33,14 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         backgroundColor: 'white',
         height: 300,
-        margin: 20
+        margin: 20,
     },
-    image: {
+    image:{
         width: '100%',
         height: '100%',
 
     },
-    title: {
+    title:{
         fontSize:18,
         marginVertical: 4,
     },
@@ -56,12 +60,16 @@ const styles = StyleSheet.create({
         height: '15%',
         padding: 10
     },
-    imageContainer: {
+    imageContainer:{
        height: '60%',
        width: '100%',
        borderTopLeftRadius: 10,
        borderTopRightRadius: 10,
        overflow: 'hidden'
+    },
+    touchable:{
+        overflow: 'hidden',
+        borderRadius: 10,
     }
 });
 
