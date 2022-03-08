@@ -1,9 +1,10 @@
 import React, { Children } from "react";
 import { View, Text, Image, StyleSheet,  TouchableOpacity } from 'react-native';
+import Card from '../UI/Card';
 
 const ProductItem = props => {
     return (
-        <View style={styles.touchable}>
+        <Card style={styles.touchable}>
     <TouchableOpacity onPress={props.onSelect} >
     <View style={styles.product}>
         <View style={styles.imageContainer}>
@@ -18,25 +19,18 @@ const ProductItem = props => {
         </View>
     </View>
     </TouchableOpacity>
-    </View>
+    </Card>
     );
 };
 
 const styles = StyleSheet.create({
     product:{
-        shadowColor: 'black',
-        shadowOpacity: 0.26,
-        textShadowOffset: { width: 0, height: 2 },
-        elevation: 5,
-        borderRadius: 10,
-        backgroundColor: 'white',
         height: 300,
         margin: 20,
     },
     image:{
         width: '100%',
         height: '100%',
-
     },
     title:{
         fontSize:18,
