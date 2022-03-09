@@ -63,7 +63,7 @@ const UserProductScreen = props => {
         /> 
         </HeaderButtons>
         },{
-            headerRight: (
+            headerRight: () =>
                 <HeaderButtons HeaderButtonComponent={HeaderButton}>
                   <Item
                     title="Add"
@@ -73,7 +73,6 @@ const UserProductScreen = props => {
                     }}
                   />
         </HeaderButtons>
-      )
     };
 };
 
