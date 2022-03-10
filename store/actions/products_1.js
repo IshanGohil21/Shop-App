@@ -8,8 +8,14 @@ export const SET_PRODUCTS = 'SET_PRODUCTS';
 export const fetchProducts = () => {
     return async dispatch => {
         //any async code you want !!
-        const response = await fetch('https://shop-app-7d3a8-default-rtdb.firebaseio.com/products.json'
+        try {
+        const response = await fetch(
+        'https://shop-app-7d3a8-default-rtdb.firebaseio.com/products.json'
         );
+
+        if(!response.ok) {
+            throw new Error('Someting Went Wrong!');
+        }
 
         const resData = await response.json();
         const loadedProducts = [];
@@ -21,16 +27,36 @@ export const fetchProducts = () => {
                 resData[key].title,
                 resData[key].imageUrl,
                 resData[key].description,
-                resData[key].price))
-                ;
-        }
+                resData[key].price
+                )
+              );
+            }
 
         dispatch({ type: SET_PRODUCTS, products: loadedProducts });
-    };
+        }
+        catch(err){
+            //Send to custom Analytics Server
+            throw err;
+        }
+    }
 };
 
 export const deleteProduct = productId => {
-    return { type: DELETE_PRODUCT , pid: productId };
+    return  async dispatch => {
+        const response = await fetch(
+            `https://shop-app-7d3a8-default-rtdb.firebaseio.com/products/${productId}.json`,
+            {
+                method: 'DELETE',
+                
+            }
+        );
+
+        if(!response.ok){
+            throw new Error('Something Went Wrong')
+        }
+
+        dispatch({  type: DELETE_PRODUCT, pid: productId});
+    };
 };
 
 export const createProduct = (title, description, imageUrl, price) => {
@@ -63,12 +89,34 @@ export const createProduct = (title, description, imageUrl, price) => {
     }
 }
 export const updateProduct = (id, title, description, imageUrl, ) => {
-    return { type: UPDATE_PRODUCT,
-        pid: id,
-        productData: {
-            title,
-            description,
-            imageUrl
+    return async dispatch => {
+            //any async code you want !!
+        await fetch(
+            `https://shop-app-7d3a8-default-rtdb.firebaseio.com/products/${id}.json`,
+            {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    title,
+                    description,
+                    imageUrl,
+                })
+            }
+        );
+
+        if(!response.ok){
+            throw new Error('Something Went Wrong')
         }
-    }
-}
+        
+        dispatch({ 
+            type: UPDATE_PRODUCT,
+               productData: {
+               title,
+               description,
+               imageUrl,
+             }
+        });
+    };
+};
