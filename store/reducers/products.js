@@ -28,34 +28,36 @@ export default (state = initalState, action) => {
                 availableProducts: state.availableProducts.concat(newProduct),
                 userProducts: state.userProducts.concat(newProduct)
             };
+        
+
         case UPDATE_PRODUCT:
-            const productIndex = state.userProducts.findIndex(
-                prod => prod.id === action.pid
-            );
-            const updatedProduct = new Product(
-                action.pid, 
-                state.userProducts[productIndex].ownerId,
-                action.productData.title,
-                action.productData.imageUrl,
-                action.productData.description,
-                state.userProducts[productIndex].price,
-                );
-            const updatedUSerProduct = [...state.userProducts];
-            updatedUSerProduct[productIndex] = updatedProduct;
-            const availableProductsIndex = state.availableProducts.findIndex(
-                prod => prod.id === action.pid
-            );
-            const updatedAvailableProducts = [...state.availableProducts];
-            updatedAvailableProducts[availableProductsIndex] = updatedProduct;
-            return {
-                ...state,
-                availableProducts: updatedAvailableProducts,
-                userProducts: updatedUSerProduct
-            };
+      const productIndex = state.userProducts.findIndex(
+        prod => prod.id === action.pid
+      );
+      const updatedProducts = new Product(
+        action.pid,
+        state.userProducts[productIndex].ownerId,
+        action.productData.title,
+        action.productData.imageUrl,
+        action.productData.description,
+        state.userProducts[productIndex].price
+      );
+      const updatedUserProducts = [...state.userProducts];
+      updatedUserProducts[productIndex] = updatedProducts;
+      const availableProductIndex = state.availableProducts.findIndex(
+        prod => prod.id === action.pid
+      );
+      const updatedAvailableProducts = [...state.availableProducts];
+      updatedAvailableProducts[availableProductIndex] = updatedProducts;
+      return {
+        ...state,
+        availableProducts: updatedAvailableProducts,
+        userProducts: updatedUserProducts
+      };
         case DELETE_PRODUCT:
             return {
                 ...state,
-                userProducts: state.userProducts.filter(product => 
+                userProduct: state.userProducts.filter(product => 
                     product.id !== action.pid
                 ),
                 availableProducts: state.availableProducts.filter(
@@ -65,3 +67,4 @@ export default (state = initalState, action) => {
         }
     return state;
 };
+
