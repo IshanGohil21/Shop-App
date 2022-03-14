@@ -6,7 +6,8 @@ export const UPDATE_PRODUCT = 'UPDATE_PRODUCT';
 export const SET_PRODUCTS = 'SET_PRODUCTS';
 
 export const fetchProducts = () => {
-    return async dispatch => {
+    return async (dispatch, getState) => {
+        const userId = getState().auth.userId;
         //any async code you want !!
         try {
         const response = await fetch(
@@ -23,7 +24,7 @@ export const fetchProducts = () => {
         for(const key in resData) {
             loadedProducts.push(new Product(
                 key, 
-                'u1', 
+                resData[key].ownerId, 
                 resData[key].title,
                 resData[key].imageUrl,
                 resData[key].description,
@@ -32,9 +33,12 @@ export const fetchProducts = () => {
               );
             }
 
-        dispatch({ type: SET_PRODUCTS, products: loadedProducts });
-        }
-        catch(err){
+        dispatch({ 
+            type: SET_PRODUCTS, 
+            products: loadedProducts, 
+            userProducts: loadedProducts.filter(prod => prod.ownerId === userId)
+        });
+        }catch(err){
             //Send to custom Analytics Server
             throw err;
         }
@@ -63,6 +67,7 @@ export const deleteProduct = productId => {
 export const createProduct = (title, description, imageUrl, price) => {
     return async (dispatch, getState) => {
         const token = getState().auth.token;
+        const userId = getState().auth.userId;
         //any async code you want !!
         const response = await fetch(
             `https://shop-app-7d3a8-default-rtdb.firebaseio.com/products.json?auth=${token}`,
@@ -75,7 +80,8 @@ export const createProduct = (title, description, imageUrl, price) => {
                 title,
                 description,
                 imageUrl,
-                price
+                price,
+                ownerId: userId
             })
         });
 
@@ -87,13 +93,15 @@ export const createProduct = (title, description, imageUrl, price) => {
             title,
             description,
             imageUrl,
-            price
+            price,
+            ownerId: userId
             }
         });
     }
 }
 export const updateProduct = (id, title, description, imageUrl, ) => {
     return async (dispatch, getState) => {
+        console.log(getState());
         const token = getState().auth.token;
             //any async code you want !!
         const response =  await  fetch(

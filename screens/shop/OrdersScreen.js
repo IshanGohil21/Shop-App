@@ -8,7 +8,7 @@ import * as ordersActions from '../../store/actions/orders_1';
 import Colors from "../../constants/Colors";
 
 const OrdersScreen = props => {
-    const[isLooading, setIsLoading] = useState(false);
+    const[isLoading, setIsLoading] = useState(false);
     const orders = useSelector(state => state.orders.orders);
     const dispatch = useDispatch();
 
@@ -19,13 +19,21 @@ const OrdersScreen = props => {
         });
     }, [dispatch])
 
-    if(isLooading){
+    if(isLoading){
         return (
             <View style={styles.centered}>
                 <ActivityIndicator 
                 size='large' 
                 color={Colors.primary}
                 />
+            </View>
+        )
+    }
+
+    if(orders.length === 0){
+        return (
+            <View style={{flex: 1, justifyContent: 'center' ,alignItems: "center"}}>
+                <Text>No Orders found . Start Ordering some products</Text>
             </View>
         )
     }

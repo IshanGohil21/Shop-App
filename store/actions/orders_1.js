@@ -4,11 +4,11 @@ export const ADD_ORDER = 'ADD_ORDER';
 export const SET_ORDERS = 'SET_ORDERS';
 
 export const fetchOrders = () => {
-    return async dispatch => {
-
+    return async (dispatch, getState) => {
+        const userId = getState().auth.userId;
         try {
             const response = await fetch(
-            'https://shop-app-7d3a8-default-rtdb.firebaseio.com/orders/u1.json'
+            `https://shop-app-7d3a8-default-rtdb.firebaseio.com/orders/${userId}.json`
             );
     
             if(!response.ok) {
@@ -24,24 +24,25 @@ export const fetchOrders = () => {
                         key, 
                         resData[key].cartItems, 
                         resData[key].totalAmount, 
-                        new Date(resData[key].date
+                        new Date(resData[key].date)
                     )
-                )); 
+                ); 
             }    
-        dispatch({ type: SET_ORDERS, orders:loadedOrders});    
+        dispatch({ type: SET_ORDERS, orders: loadedOrders});    
     }  catch(err) {
         throw err;
         }
-    }
-}
+    };
+};
 
 export const addOrder = (cartItems, totalAmount) => {
     
     return async (dispatch, getState) => {
         const token = getState().auth.token;
+        const userId = getState().auth.userId;
         const date = new Date();
         const response = await fetch(
-            `https://shop-app-7d3a8-default-rtdb.firebaseio.com/orders/u1.json?auth${token}`, 
+            `https://shop-app-7d3a8-default-rtdb.firebaseio.com/orders/${userId}.json?auth${token}`, 
             {
             method: 'POST',
             headers: {
@@ -70,5 +71,5 @@ export const addOrder = (cartItems, totalAmount) => {
             date: date 
             } 
         });
-    }
-}
+    };
+};
