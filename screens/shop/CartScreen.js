@@ -8,7 +8,7 @@ import * as ordersActions from '../../store/actions/orders_1';
 import Card from "../../components/UI/Card";
 
 const CartScreen = props => {
-    const[isLooading, setIsLoading] = useState(false);
+    const[isLoading, setIsLoading] = useState(false);
     const cartTotalAmount =  useSelector(state => state.cart.totalAmount);
     const cartItems = useSelector(state =>{
         const transformedCartItems = [];
@@ -21,7 +21,9 @@ const CartScreen = props => {
                 sum: state.cart.items[key].sum
             });
         }
-        return transformedCartItems;
+        return transformedCartItems.sort((a, b) =>
+        a.productId > b.productId ? 1 : -1
+      );
     });
     const dispatch = useDispatch();
 
@@ -29,27 +31,29 @@ const CartScreen = props => {
         setIsLoading(true);
         await dispatch(ordersActions.addOrder(cartItems, cartTotalAmount));
         setIsLoading(false);
-    }
+    };
 
     return <View style={styles.screen}>
         <Card style={styles.summary}>
             <Text style={styles.summaryText}>
-                Total: <Text style={styles.amount}>${Math.round(cartTotalAmount.toFixed(2) * 100 / 100 )}
+                Total: { ' ' }
+                <Text style={styles.amount}>
+                    ${Math.round(cartTotalAmount.toFixed(2) * 100) / 100}
                 </Text>
                 </Text>
-                {isLooading ? 
+                {isLoading ? (
                 <ActivityIndicator 
                 size='small' 
                 color={Colors.primary} 
                 /> 
-                :  
+                ) : (  
             <Button  
                 color={Colors.primary} 
                 title="Order Now" 
                 disabled={cartItems.length === 0}
                 onPress={sendOrderHandler}
             />
-        }
+        )}
         </Card>
         <FlatList 
         data={cartItems} 
@@ -69,7 +73,7 @@ const CartScreen = props => {
 };
 
 
-CartScreen.navigationOptions = {
+export const screenOptions = {
     headerTitle: 'Your Cart'
 };
 
@@ -83,7 +87,6 @@ const styles = StyleSheet.create({
     padding: 10,
     marginBottom: 20,
     flexDirection: 'row',
-    flexDirection: 'row'
     },
     summaryText:{
         fontSize: 18,

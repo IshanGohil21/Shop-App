@@ -194,7 +194,7 @@ const EditProdcutScreen = props => {
     );
 };
 
-EditProdcutScreen.navigationOptions = navData => {
+export const screenOptions = navData => {
     const submitFin = navData.navigation.getParam('submit');
     return {
         headerTitle: navData.navigation.getParam('productId') 

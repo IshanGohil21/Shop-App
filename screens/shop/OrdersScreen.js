@@ -27,7 +27,7 @@ const OrdersScreen = props => {
                 color={Colors.primary}
                 />
             </View>
-        )
+        );
     }
 
     if(orders.length === 0){
@@ -55,7 +55,7 @@ const OrdersScreen = props => {
    );
 };
 
-OrdersScreen.navigationOptions = navData => {
+export const screenOptions = navData => {
     return {
     headerTitle: 'Your Orders',
     headerLeft: () =>
