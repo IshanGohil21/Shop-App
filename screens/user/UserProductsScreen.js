@@ -6,6 +6,7 @@ import Colors from "../../constants/Colors";
 import * as productsActions from '../../store/actions/products_1'
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import HeaderButton from '../../components/UI/HeaderButton';
+import { Platform } from "react-native-web";
 
 
 const UserProductScreen = props => {
@@ -66,7 +67,7 @@ export const screenOptions = navData => {
         <HeaderButtons HeaderButtonComponent={HeaderButton}>
             <Item 
             title='Menu'
-            iconName='ios-menu' 
+            iconName={Platform.OS === 'android' ? 'md-menu':'ios-menu'} 
             onPress={() => {
                 navData.navigation.toggleDrawer();
             }} 
